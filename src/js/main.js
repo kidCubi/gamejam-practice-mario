@@ -1,6 +1,8 @@
 'use strict';
 import Point from './modules/Point.js';
 
+var cursors;
+
 
 var config = {
     type: Phaser.AUTO,
@@ -26,7 +28,7 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
 
     //this.add.image(400, 300, 'sky');
-    
+
 
 }
 
