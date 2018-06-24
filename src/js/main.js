@@ -33,7 +33,7 @@ function create() {
 }
 
 function update() {
-    snake.move();
+
     if (cursors.left.isDown) {
         //move left
     } else if (cursors.right.isDown) {
