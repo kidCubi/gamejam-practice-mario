@@ -40,6 +40,7 @@ function preload() {
 }
 
 function create() {
+    player.create(this);
     cursors = this.input.keyboard.createCursorKeys();
     //this.add.image(400, 300, 'sky');
 }
@@ -48,15 +49,16 @@ function update() {
 
     if (cursors.left.isDown) {
         //move left
-        player.player.setVelocityX(-160);
+        player.character.setVelocityX(-160);
+        player.character.anims.play('left', true);
     } else if (cursors.right.isDown) {
         //move right
-        player.player.setVelocityX(160);
+        player.character.setVelocityX(160);
     } else if (cursors.up.isDown) {
         //move up
     } else if (cursors.down.isDown) {
         //move down
     } else {
-        player.player.setVelocityX(0);
+        player.character.setVelocityX(0);
     }
 }

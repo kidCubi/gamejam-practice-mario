@@ -20,45 +20,48 @@ export default class Player {
         this.position =  constructorObject.position;
         this.isClimbing =  constructorObject.isClimbing;
 
-        this.player = null;
+        this.character = null;
+        this.sprite = null;
 
         this.addSprites = this.addSprites.bind(this);
-        this.createAnims = this.createAnims.bind(this);
     }
 
     preload(phaserScene) {
-        phaserScene.load.spritesheet('dude', 'dist/assets/dude.png', {
-            frameWidth: 32,
-            frameHeight: 48
-        });
-        this.player = phaserScene.physics.add.sprite(100, 450, 'dude');
+        phaserScene.load.spritesheet('girl',
+            'dist/assets/female_tilesheet.png',
+            { frameWidth: 80, frameHeight: 109 }
+        );
         this.addSprites(phaserScene);
     }
 
-    addSprites(phaserScene) {
-        this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
-        this.createAnims(phaserScene);
-    }
+    create(phaserScene) {
+        this.character = phaserScene.physics.add.sprite(100, 450, 'girl');
+        this.character.setBounce(0.2);
+        this.character.setCollideWorldBounds(true);
 
-    createAnims(phaserScene) {
         phaserScene.anims.create({
             key: 'left',
-            frames: phaserScene.anims.generateFrameNumbers('dude', {start: 0, end : 3}),
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 0, end : 3}),
             frameRate: 10,
             repeat: -1
         });
         phaserScene.anims.create({
             key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
+            frames: [ { key: 'girl', frame: 4 } ],
             frameRate: 20
         });
         phaserScene.anims.create({
             key: 'right',
-            frames: phaserScene.anims.generateFrameNumbers('dude', {start: 5, end : 8}),
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 5, end : 8}),
             frameRate: 10,
             repeat: -1
         });
+
+    }
+
+    addSprites(phaserScene) {
+
+
     }
 
 }
