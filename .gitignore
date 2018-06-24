@@ -1,4 +1,4 @@
 #Intelij
 .idea/
-dist/
+dist/js/
 node_modules/
