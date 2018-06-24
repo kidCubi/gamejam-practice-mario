@@ -4,38 +4,24 @@ import Environment from './modules/environment/Environment.js';
 
 
 var cursors;
-var windowHeight = window.innerHeight;
+
 var windowWidth = window.innerWidth;
 
+//the ladderXCoordinateList length should be the same as the platformPositionList length
+//platform list should start with highest y walue element to lowest y value element
 var environment = new Environment({
-    ladderPositionList : [
-        new Point({
-            x : 550,
-            y : windowHeight
-
-        }),
-        new Point({
-            x : 350,
-            y : 100
-        }),
-        new Point({
-            x : 800,
-            y : 350
-        })
+    ladderXCoordinateList : [
+        550,
+        350
     ],
     platformPositionList : [
         new Point({
             x : windowWidth / 2,
-            y : windowHeight
-
+            y : 450
         }),
         new Point({
             x : windowWidth / 2,
             y : 100
-        }),
-        new Point({
-            x : windowWidth / 2,
-            y : 350
         })
     ]
 });
@@ -46,6 +32,13 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
     scene: {
         preload: preload,
         create: create,
@@ -67,6 +60,9 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
 
     environment.create(this);
+
+    //TODO: uncomment after merge
+    //this.physics.add.collider(player, platforms);
 
 }
 

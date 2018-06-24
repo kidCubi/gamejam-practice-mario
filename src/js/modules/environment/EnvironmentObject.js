@@ -17,9 +17,13 @@ import Point from '../Point.js';
 export default class EnvironmentObject  {
     constructor(constructorObject) {
         this.position = constructorObject.position;
-        this.width = constructorObject.width;
-        this.height = constructorObject.height;
-        this.img = constructorObject.img;
+        this.width = constructorObject.width || 0;
+        this.height = constructorObject.height || 0;
+        this.img = constructorObject.img || 0;
+        this.scale = constructorObject.scale || new Point({
+            x : 1,
+            y : 1
+        });
 
     }
 
@@ -27,8 +31,10 @@ export default class EnvironmentObject  {
         preloader.load.image(this.img.title, this.img.src);
     }
 
-    draw(creator) {
-        creator.add.image(this.position.x, this.position.y, this.img.title);
+    create(environmentObjectGroup) {
+        environmentObjectGroup.create(this.position.x, this.position.y, this.img.title).setScale(this.scale.x, this.scale.y).refreshBody();
+
     }
+
 
 }

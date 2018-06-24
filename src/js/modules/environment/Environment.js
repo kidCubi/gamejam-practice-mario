@@ -15,59 +15,94 @@ import Platform from './Platform.js';
 
 export default class Environment  {
     constructor(constructorObject) {
-        this.ladderPositionList = constructorObject.ladderPositionList;
+        this.ladderXCoordinateList = constructorObject.ladderXCoordinateList;
         this.platformPositionList = constructorObject.platformPositionList;
         this.ladderList = [];
         this.platformList = [];
+        this.ladderGroup;
+        this.platformGroup;
+        this.ladder = new Ladder({
+            position : new Point({
+                x : 0,
+                y : 0
+            }),
+            width : 66,
+            height : 95,
+            img : new Img({
+                title : 'ladder',
+                src : '/dist/assets/ladder.png'
+            })
+        }),
+        this.platform = new Platform({
+            position : new Point({
+                x : 0,
+                y : 0
+            }),
+            width : 665,
+            height : 95,
+            img : new Img({
+                title : 'platform',
+                src : '/dist/assets/platform.png'
+            })
+        })
     }
 
     init() {
-        this.ladderPositionList.forEach((ladder) => {
-            this.ladderList.push(new Ladder({
-                position : new Point({
-                    x : ladder.x,
-                    y : ladder.y - 95 / 2
-                }),
-                width : 66,
-                height : 95,
-                img : new Img({
-                    title : 'ladder',
-                    src : '/dist/assets/ladder.png'
-                })
-            }));
-        });
+        var windowHeight = window.innerHeight;
+
+        //first lets push the platform on the ground
+        this.platformList.push(new Platform({
+            position : new Point({
+                x : this.platformPositionList[0].x,
+                y : windowHeight - this.platform.height / 2
+            }),
+        }));
 
         this.platformPositionList.forEach((platform) => {
             this.platformList.push(new Platform({
                 position : platform,
-                width : 665,
-                height : 95,
-                img : new Img({
-                    title : 'platform',
-                    src : '/dist/assets/platform.png'
-                })
             }));
         });
+
+
+
+        this.ladderXCoordinateList.forEach((ladderX, index) => {
+            if(this.platformList[index] && this.platformList[index + 1]) {
+                var scaleY = (this.platformList[index].position.y - this.platformList[index + 1].position.y) / this.ladder.height;
+                this.ladderList.push(new Ladder({
+                    position : new Point({
+                        x : ladderX,
+                        y : this.platformList[index].position.y - 95 * scaleY / 2
+                    }),
+                    scale : new Point({
+                        x : 1,
+                        y : scaleY
+                    })
+                }));
+            }
+
+        });
+
+
     }
 
     preload(preloader) {
-        this.ladderList.forEach((ladder) => {
-          ladder.preload(preloader);
-        });
-
-        this.platformList.forEach((platform) => {
-          platform.preload(preloader);
-        });
+        this.ladder.preload(preloader);
+        this.platform.preload(preloader);
     }
 
 
     create(creator) {
+        this.ladderGroup = creator.physics.add.staticGroup();
+
         this.ladderList.forEach((ladder) => {
-          ladder.draw(creator);
+          ladder.create(this.ladderGroup);
         });
 
+        this.platformGroup = creator.physics.add.staticGroup();
+
         this.platformList.forEach((platform) => {
-          platform.draw(creator);
+          platform.create(this.platformGroup);
         });
     }
 
