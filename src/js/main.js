@@ -49,16 +49,16 @@ function update() {
 
     if (cursors.left.isDown) {
         //move left
-        player.character.setVelocityX(-160);
-        player.character.anims.play('left', true);
+        player.move("left");
     } else if (cursors.right.isDown) {
         //move right
-        player.character.setVelocityX(160);
+        player.move("right");
     } else if (cursors.up.isDown) {
         //move up
+        player.move("up");
     } else if (cursors.down.isDown) {
         //move down
     } else {
-        player.character.setVelocityX(0);
+        player.idle();
     }
 }

@@ -23,15 +23,16 @@ export default class Player {
         this.character = null;
         this.sprite = null;
 
-        this.addSprites = this.addSprites.bind(this);
+        this.move = this.move.bind(this);
+        this.idle = this.idle.bind(this);
+
     }
 
     preload(phaserScene) {
-        phaserScene.load.spritesheet('girl',
+        this.sprite = phaserScene.load.spritesheet('girl',
             'dist/assets/female_tilesheet.png',
-            { frameWidth: 80, frameHeight: 109 }
+            { frameWidth: 80, frameHeight: 110 }
         );
-        this.addSprites(phaserScene);
     }
 
     create(phaserScene) {
@@ -41,7 +42,7 @@ export default class Player {
 
         phaserScene.anims.create({
             key: 'left',
-            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 0, end : 3}),
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 9, end : 10}),
             frameRate: 10,
             repeat: -1
         });
@@ -52,16 +53,50 @@ export default class Player {
         });
         phaserScene.anims.create({
             key: 'right',
-            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 5, end : 8}),
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 9, end : 10}),
             frameRate: 10,
             repeat: -1
         });
-
+        phaserScene.anims.create({
+            key: 'idle',
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 23, end : 23}),
+            frameRate: 10,
+            repeat: -1
+        });
+        phaserScene.anims.create({
+            key: 'climb',
+            frames: phaserScene.anims.generateFrameNumbers('girl', {start: 5, end : 6}),
+            frameRate: 10,
+            repeat: -1
+        });
     }
 
-    addSprites(phaserScene) {
+    move(direction) {
 
+        switch(direction) {
+            case "left":
+                this.character.setVelocityX(-160);
+                this.character.anims.play('left', true);
+                this.character.scaleX = -1;
+                break;
+            case "right":
+                this.character.setVelocityX(160);
+                this.character.anims.play('right', true);
+                break;
+            case "up":
+                this.isClimbing = true;
+                this.character.setVelocityY(-50);
+                this.character.anims.play('climb', true);
+                break;
+            case "idle":
 
+        }
+    }
+
+    idle() {
+        this.character.setVelocityX(0);
+        this.character.anims.play('idle', true);
+        this.character.scaleX = 1;
     }
 
 }
