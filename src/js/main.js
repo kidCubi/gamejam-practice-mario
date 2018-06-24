@@ -1,8 +1,31 @@
 'use strict';
 import Point from './modules/Point.js';
 import Player from './modules/Player.js';
+import Environment from './modules/environment/Environment.js';
 
 var cursors;
+
+var windowWidth = window.innerWidth;
+
+//the ladderXCoordinateList length should be the same as the platformPositionList length
+//platform list should start with highest y walue element to lowest y value element
+var environment = new Environment({
+    ladderXCoordinateList : [
+        550,
+        350
+    ],
+    platformPositionList : [
+        new Point({
+            x : windowWidth / 2,
+            y : 450
+        }),
+        new Point({
+            x : windowWidth / 2,
+            y : 100
+        })
+    ]
+});
+environment.init();
 
 
 var config = {
@@ -10,9 +33,10 @@ var config = {
     width: 800,
     height: 600,
     physics: {
-      default: 'arcade',
+        default: 'arcade',
         arcade: {
-          gravity: { y: 300 }
+            gravity: { y: 300 },
+            debug: false
         }
     },
     scene: {
@@ -20,7 +44,7 @@ var config = {
         create: create,
         update: update
     },
-    backgroundColor: '#00ffff'
+    backgroundColor: '#000000'
 };
 
 var game = new Phaser.Game(config);
@@ -34,15 +58,22 @@ var player = new Player({
     isClimbing: false
 });
 
+
 function preload() {
-    //this.load.image('sky', 'assets/sky.png');
+
     player.preload(this);
+    environment.preload(this);
 }
 
 function create() {
     player.create(this);
     cursors = this.input.keyboard.createCursorKeys();
-    //this.add.image(400, 300, 'sky');
+
+    environment.create(this);
+
+    //TODO: uncomment after merge
+    //this.physics.add.collider(player, platforms);
+
 }
 
 function update() {
